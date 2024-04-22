@@ -5,6 +5,7 @@ authors = ["takahiro6730"]
 edition = "2018"
 
 [dependencies]
+image = "*"
 
 [[bin]]
 name = "svg_generator"
