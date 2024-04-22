@@ -1,0 +1,11 @@
+[package]
+name = "svg_generation"
+version = "0.1.0"
+authors = ["takahiro6730"]
+edition = "2018"
+
+[dependencies]
+
+[[bin]]
+name = "svg_generator"
+path = "src/main.rs"
