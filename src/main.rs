@@ -10,30 +10,23 @@ fn main() {
 
         let gray_image_data = convert_to_grayscale(&img_data);
 
-        let sigma = 100.0; // Standard deviation of the Gaussian kernel
+        let sigma = 1.0; 
         let blurred_image = apply_gaussian_blur(&gray_image_data, sigma);
         let (gradient_x, gradient_y) = compute_gradients(&blurred_image);
 
 
         let suppressed_image = non_maximum_suppression(&gradient_x, &gradient_y);
 
-        let thresholded_image = apply_hysteresis_thresholding(&suppressed_image, 150, 200); // Adjust thresholds as needed
+        let thresholded_image = apply_hysteresis_thresholding(&suppressed_image, 150, 200);
 
-        // Save the result
         thresholded_image.save("thresholded_image.png").expect("Failed to save image");
-    // Save the result
-    // suppressed_image.save("suppressed_image.png").expect("Failed to save image");
-        // Save the gradient images
-        // gradient_x.save("gradient_x.png").expect("Failed to save gradient_x image");
-        // gradient_y.save("gradient_y.png").expect("Failed to save gradient_y image");
-        
+   
     } else {
         println!("Failed to open the PNG file");
     }
 }
 fn convert_to_grayscale(image_data: &image::RgbaImage) -> image::GrayImage {
     let mut gray_image_data = image::GrayImage::new(image_data.width(), image_data.height());
-
     for (x, y, pixel) in image_data.enumerate_pixels() {
         let r = pixel[0] as f32;
         let g = pixel[1] as f32;
@@ -41,17 +34,13 @@ fn convert_to_grayscale(image_data: &image::RgbaImage) -> image::GrayImage {
         let luminance = (0.2126 * r + 0.7152 * g + 0.0722 * b).round() as u8;
         gray_image_data.put_pixel(x, y, image::Luma([luminance]));
     }
-
     gray_image_data
 }
 
-
 fn apply_gaussian_blur(image: &image::GrayImage, sigma: f32) -> image::GrayImage {
-    // Apply Gaussian blur to the grayscale image
-    let kernel = gaussian_kernel(sigma); // Generate the Gaussian kernel
-    let mut blurred_image = image.clone();
 
-    // Convolve the image with the Gaussian kernel
+    let kernel = gaussian_kernel(sigma);
+    let mut blurred_image = image.clone();
     for y in 1..image.height() - 1 {
         for x in 1..image.width() - 1 {
             let mut sum = 0.0;
@@ -74,7 +63,6 @@ fn apply_gaussian_blur(image: &image::GrayImage, sigma: f32) -> image::GrayImage
 }
 
 fn gaussian_kernel(sigma: f32) -> [[f32; 3]; 3] {
-    // Generate a 3x3 Gaussian kernel with the given standard deviation
     let sigma_sq = sigma * sigma;
     let mut kernel = [[0.0; 3]; 3];
     let coefficient = 1.0 / (2.0 * std::f32::consts::PI * sigma_sq);
@@ -87,7 +75,6 @@ fn gaussian_kernel(sigma: f32) -> [[f32; 3]; 3] {
         }
     }
 
-    // Normalize the kernel
     let sum: f32 = kernel.iter().flat_map(|row| row.iter()).sum();
     for row in &mut kernel {
         for value in row {
