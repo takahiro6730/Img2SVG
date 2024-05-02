@@ -14,7 +14,6 @@ fn main() {
         let blurred_image = apply_gaussian_blur(&gray_image_data, sigma);
         let (gradient_x, gradient_y) = compute_gradients(&blurred_image);
 
-
         let suppressed_image = non_maximum_suppression(&gradient_x, &gradient_y);
 
         let thresholded_image = apply_hysteresis_thresholding(&suppressed_image, 150, 200);
@@ -86,11 +85,10 @@ fn gaussian_kernel(sigma: f32) -> [[f32; 3]; 3] {
 }
 
 fn compute_gradients(image: &image::GrayImage) -> (image::GrayImage, image::GrayImage) {
-    // Sobel operator kernels
+
     let sobel_x_kernel = [[-1, 0, 1], [-2, 0, 2], [-1, 0, 1]];
     let sobel_y_kernel = [[-1, -2, -1], [0, 0, 0], [1, 2, 1]];
 
-    // Convolve the image with the Sobel kernels to compute gradients
     let gradient_x = convolve(image, &sobel_x_kernel);
     let gradient_y = convolve(image, &sobel_y_kernel);
 
